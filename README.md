@@ -88,7 +88,7 @@ To use the plugin, simply select the "PS Appserver" node step type when adding a
 [ssh_environment_variable_configuration]: http://rundeck.org/docs/plugins-user-guide/ssh-plugins.html#passing-environment-variables-through-remote-command
 [script_plugin_instructions]: http://rundeck.org/docs/developer/plugin-development.html#script-plugin-development
 [environment_variable_setup]: http://rundeck.org/docs/plugins-user-guide/ssh-plugins.html#passing-environment-variables-through-remote-command
-[latest_release]: https://github.com/jrbing/pushover-notification-plugin/releases/latest
+[latest_release]: https://github.com/jrbing/ps-app-plugin/releases/latest
 
 
 License
