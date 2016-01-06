@@ -1,0 +1,37 @@
+name: ps-app plugin
+version: 1.0
+rundeckPluginVersion: 1.0
+author: JR Bing
+date: 2015-12-17
+providers:
+  - name: ps-app
+    service: RemoteScriptNodeStep
+    title: PS Appserver
+    description: Executes commands to adminster a PeopleSoft application server
+    plugin-type: script
+    script-interpreter: /bin/bash
+    script-file: psadmin.sh
+    script-args: '${config.appserver_domain} ${config.action}'
+    config:
+      - type: String
+        name: appserver_domain
+        title: Appserver Domain
+        description: Application Server Domain
+        default:
+        required: true
+      - type: Select
+        name: action
+        title: Type
+        description: Action
+        default: status
+        required: true
+        values:
+          - status
+          - start
+          - stop
+          - kill
+          - configure
+          - purge
+          - flush
+          - restart
+          - bounce
