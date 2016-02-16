@@ -12,7 +12,7 @@ Copy the [ps-app-plugin.zip file][latest_release] to your `$RDECK_BASE/libext` d
 
     mv ps-app-plugin.zip $RDECK_BASE/libext
 
-You should now have an additional "ps appserver" option when configuring jobs.
+You should now have an additional "PS Appserver" option when configuring jobs.
 
 
 Configuration
