@@ -10,7 +10,9 @@
 #
 #===============================================================================
 
-export PMID=$(hostname) # Export the PMID in order to resolve an issue that Tuxedo has with long hostnames
+# Export the PMID in order to resolve an issue that Tuxedo has with long hostnames
+PMID=$(hostname)
+export PMID
 
 domain=$1
 action=$2
@@ -18,14 +20,26 @@ action=$2
 required_environment_variables=( PS_HOME PS_CFG_HOME PS_APP_HOME PS_PIA_HOME PS_CUST_HOME TUXDIR )
 optional_environment_variables=( DM_HOME PS_DM_DATA_IN PS_DM_DATA_OUT PS_DM_SCRIPT PS_DM_LOG JAVA_HOME COBDIR PS_FILEDIR PS_SERVDIR ORACLE_HOME ORACLE_BASE TNS_ADMIN AGENT_HOME )
 
-set_required_environment_variables () {
+function echoinfo() {
+  local GC="\033[1;32m"
+  local EC="\033[0m"
+  printf "${GC} ☆  INFO${EC}: %s\n" "$@";
+}
+
+function echoerror() {
+  local RC="\033[1;31m"
+  local EC="\033[0m"
+  printf "${RC} ✖  ERROR${EC}: %s\n" "$@" 1>&2;
+}
+
+function set_required_environment_variables () {
   for var in ${required_environment_variables[@]}; do
     rd_node_var=$( printenv RD_NODE_${var} )
     export $var=$rd_node_var
   done
 }
 
-set_optional_environment_variables () {
+function set_optional_environment_variables () {
   for var in ${optional_environment_variables[@]}; do
     if [[ `printenv RD_NODE_${var}` ]]; then
       rd_node_var=RD_NODE_${var}
@@ -34,16 +48,16 @@ set_optional_environment_variables () {
   done
 }
 
-check_variables () {
+function check_variables () {
   for var in ${required_environment_variables[@]}; do
     if [[ `printenv ${var}` = '' ]]; then
-      echo "${var} is not set.  Please make sure this is set before continuing."
+      echoerror "${var} is not set.  Please make sure this is set before continuing."
       exit 1
     fi
   done
 }
 
-update_path () {
+function update_path () {
   export PATH=$PATH:.
   export PATH=$TUXDIR/bin:$PATH
   [[ $COBDIR ]] && export PATH=$COBDIR/bin:$PATH
@@ -51,19 +65,19 @@ update_path () {
   [[ $AGENT_HOME ]] && export PATH=$AGENT_HOME/bin:$PATH
 }
 
-update_ld_library_path () {
+function update_ld_library_path () {
   export LD_LIBRARY_PATH=$TUXDIR/lib:$LD_LIBRARY_PATH
   [[ $JAVA_HOME ]] && export LD_LIBRARY_PATH=$JAVA_HOME/lib:$LD_LIBRARY_PATH
   [[ $COBDIR ]] && export LD_LIBRARY_PATH=$COBDIR/lib:$LD_LIBRARY_PATH
   [[ $ORACLE_HOME ]] && export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
 }
 
-update_cobpath () {
+function update_cobpath () {
   # Add the PS_APP_HOME cblbin directory to the COBPATH
   [[ $COBPATH ]] && export COBPATH=$PS_APP_HOME/cblbin:$COBPATH
 }
 
-source_psconfig () {
+function source_psconfig () {
   cd "$PS_HOME" && source "$PS_HOME"/psconfig.sh && cd - > /dev/null 2>&1 # Source psconfig.sh
 }
 
